@@ -1,99 +1,111 @@
 body {
-    background-color: #181B33;
-    font-family: 'Poppins', sans-serif;
-    color: white;
+  background-color: #181b33;
+  font-family: "Poppins", sans-serif;
+  color: white;
 }
 
 .quiz-container {
-    background-color: #282D49;
-    width: 50%;
-    height: 640px;
-    margin-inline: auto;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    position: relative;
+  background-color: #282d49;
+  width: 50%;
+  height: 640px;
+  margin-inline: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  position: relative;
 }
 
 #question-container {
-    width: 80%;
-    position: absolute;
-    top: 80px;
-    left: 80px;
-
+  width: 80%;
+  position: absolute;
+  top: 80px;
+  left: 80px;
 }
 
-input[type=radio] {
-    color: inherit;
-    font-family: inherit;
-    border: 1px solid white;
-    margin-right: 30px;
-    accent-color: #0B6679;
+input[type="radio"] {
+  margin-right: 30px;
+  accent-color: #0b6679;
 }
 
 input:checked {
-    background-color: #2196F3
+  background-color: #2196f3;
 }
 
-#answers-container {
-    margin-top: 40px;
+.answers-main-container {
+  width: 100%;
+  position: absolute;
+  top: 200px;
+  display: grid;
+  grid-template-columns: repeat(2, 300px);
+  grid-template-rows: repeat(2, 80px);
+  grid-column-gap: 40px;
+  grid-row-gap: 30px;
 }
 
-label.answer-container {
-    border: 1px white solid;
-    padding: 10px;
-    margin-top: 20px;
-    display: block;
-    cursor: pointer;
+.answer-container {
+  border: 1px solid white;
+  padding: 10px;
+  width: 250px;
+  height: fit-content;
 }
 
 .answer-container:hover {
-    border-color: #0B6679;
-    background-color: #353c60;
-}
-
-.selected {
-    background-color: #0B6679;
-    border-color: #0B6679;
+  border-color: #2196f3;
 }
 
 .button-container {
-    position: absolute;
-    bottom: 50px;
-    left: 340px;
+  position: absolute;
+  bottom: 50px;
+  left: 340px;
 }
 
 button {
-    color: white;
-    background-color: #1b94ad;
-    padding: 10px;
-    font-family: inherit;
-    border: none;
-    cursor: pointer;
+  color: white;
+  background-color: #1b94ad;
+  padding: 10px;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #26c1e0 ;
+  background-color: #26c1e0;
 }
 
 .visibility {
-    display: none;
+  display: none;
+}
+
+.correct-answer {
+  background-color: rgb(102, 208, 102);
+}
+
+.false-answer {
+  background-color: rgb(223, 87, 87);
 }
 
 .final-score {
-    margin-inline: auto;
-    margin-top: 50px;
+  margin-inline: auto;
+  margin-top: 50px;
 }
 
 .success {
-    margin-left: 140px;
-    margin-top: 50px;
-    width: 300px;
-    height: 250px;
+  margin-left: 140px;
+  margin-top: 50px;
+  width: 300px;
+  height: 250px;
 }
 
 .fail {
-    margin-left: 140px;
-    margin-top: 50px;
-    width: 300px;
-    height: 280px;
+  margin-left: 140px;
+  margin-top: 50px;
+  width: 300px;
+  height: 280px;
+}
+
+label {
+  cursor: pointer;
+}
+
+.disable-answers {
+  pointer-events: none;
 }

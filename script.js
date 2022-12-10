@@ -1,30 +1,3 @@
-// RULES:
-// The player must guess correctly a certain amount of questions
-// Each correct answer gives him one point
-// Answers could be multiple or true/false
-// At the end of the game, the user must know his/her total score
-
-// QUESTIONS:
-// You can get them from this URL ( http://bit.ly/strive_QUIZZ ) or you can write your own
-// Could be multiple or boolean (true / false)
-
-// HINTS:
-// Keep a global variable score for the user score
-// Keep a variable questionNumber for the question the user is answering
-// When questionNumber is bigger then the available questions, present the score
-// Start working with the questions saved in a variable (or you can use AJAX for fetching external questions if you already know how to do it!)
-// Start with the easier version and THEN implement the EXTRAs
-// Please debug everything / try it on the console to be sure of what to expect from your code
-
-// EXTRA:
-// Show if the answer provided was the wrong one or correct it after clicking
-// Present the questions one at a time instead of having all of them displayed together
-// Let the user select difficulty and number of questions (you can get q/a from https://opentdb.com/api.php?amount=10&category=18&difficulty=easy modifying amount and difficulty)
-
-/* WHEN YOU ARE FINISHED
-  Commit and push the code to your personal GitHub repository; then post the link of your commit on the Homework section of today's Eduflow.
-*/
-
 const questions = [
   {
     category: "Science: Computers",
@@ -122,7 +95,11 @@ const questions = [
 ];
 
 let questionContainerNode = document.getElementById("question-container");
+let answersContainer = document.getElementsByClassName(
+  "answers-main-container"
+)[0];
 let continueButtonNode = document.getElementById("continue-button");
+let labelNodes = document.getElementsByTagName("label");
 
 let score = 0;
 let questionNumber = 0;
@@ -143,39 +120,52 @@ function generateQuestion(currentQuestion) {
 
 function checkAnswer(answer) {
   let correctAnswer = questions[questionNumber - 1].correct_answer;
-  console.log(answer + "===" + correctAnswer);
   return answer === correctAnswer;
 }
 
 function getAnswer(eventData) {
-  if (eventData.pointerId === 1) {
-    userSelectedAnswer = "";
-    let userAnswer = eventData.target.innerText;
-    userSelectedAnswer = userAnswer;
+  userSelectedAnswer = eventData.target.innerText;
+  eventData.target.parentElement.classList.remove("not-selected");
 
-    let previouslySelected = document.querySelector(".selected");
-    if (previouslySelected !== null) {
-      previouslySelected.classList.remove("selected");
+  let notSelectedAnswers = document.getElementsByClassName("not-selected");
+  for (let notSelectedAnswer of notSelectedAnswers) {
+    notSelectedAnswer.classList.add("disable-answers");
+  }
+  if (checkAnswer(userSelectedAnswer)) {
+    eventData.target.parentElement.classList.add("correct-answer");
+    score += 1;
+  } else {
+    eventData.target.parentElement.classList.add("false-answer");
+    for (let label of labelNodes) {
+      if (label.innerText === questions[questionNumber - 1].correct_answer) {
+        label.parentElement.classList.add("correct-answer");
+      }
     }
-    eventData.target.classList.add("selected");
   }
 }
 
 function buildAnswerDivs(answersArray) {
-  for (let answer of answersArray) {
-    // console.log(answer);
-    let labelNode = document.createElement("label");
-    labelNode.classList.add("answer-container");
-    labelNode.innerHTML = `<input type='radio' name='quizOption'>${answer}`;
-    labelNode.addEventListener("click", getAnswer);
-    questionContainerNode.appendChild(labelNode);
+  let answersMainDivNode = document.createElement("div");
+  answersMainDivNode.classList.add("answers-main-container");
+  questionContainerNode.appendChild(answersMainDivNode);
+  for (let i = 0; i < answersArray.length; i++) {
+    let divNode = document.createElement("div");
+    divNode.classList.add("answer-container");
+    divNode.classList.add("not-selected");
+    divNode.innerHTML = `<input type='radio' name='quizOption' id='radio${i}'><label for='radio${i}'>${answersArray[i]}</label>`;
+    document
+      .getElementsByClassName("answers-main-container")[0]
+      .appendChild(divNode);
+  }
+  for (let label of labelNodes) {
+    label.addEventListener("click", getAnswer);
   }
 }
 
 function generateAnswers(question) {
   let allAnswersArray = question.incorrect_answers;
   allAnswersArray.push(question.correct_answer);
-  // console.log(allAnswersArray);
+
   if (question.type === "boolean") {
     buildAnswerDivs(allAnswersArray);
   } else {
@@ -187,10 +177,6 @@ function generateAnswers(question) {
     }
     buildAnswerDivs(allAnswersArray);
   }
-}
-
-function stillHasQuestions(questionNumber) {
-  return questionNumber < questions.length;
 }
 
 function controlScore(score) {
@@ -213,15 +199,16 @@ function controlScore(score) {
   questionContainerNode.appendChild(imgNode);
 }
 
-function mainOperations() {
-  if (checkAnswer(userSelectedAnswer)) {
-    score += 1;
-  }
+function stillHasQuestions(questionNumber) {
+  return questionNumber < questions.length;
+}
 
+function mainOperations() {
   if (stillHasQuestions(questionNumber)) {
     questionContainerNode.innerHTML = "";
     let currentQuestion = questions[questionNumber];
     questionNumber++;
+
     questionOutOf();
     generateQuestion(currentQuestion);
     generateAnswers(currentQuestion);
@@ -235,18 +222,10 @@ function mainOperations() {
 function onLoadActions() {
   let currentQuestion = questions[questionNumber];
   questionNumber++;
+
   questionOutOf();
   generateQuestion(currentQuestion);
   generateAnswers(currentQuestion);
 }
 
 window.onload = onLoadActions;
-// HINTS
-//
-// IF YOU ARE DISPLAYING ONE QUESTION AT A TIME
-// Display the first question with the text and the radio buttons
-// when the user selects an answer, pick the next question from the array and replace the old one with it
-// saving the user's choice in a variable
-
-// How to calculate the result? You can do it in 2 ways:
-// If you are presenting one question at a time, just add one point or not to the user score if the selected answer === correct_answer
